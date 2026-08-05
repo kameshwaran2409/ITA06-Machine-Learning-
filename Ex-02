@@ -1,0 +1,31 @@
+import pandas as pd
+import numpy as np
+def candidate_elimination(csv_file):
+    df = pd.read_csv(csv_file)
+    X = df.iloc[:, :-1].values
+    y = df.iloc[:, -1].values
+    num_attributes = X.shape[1]
+    S = ['0'] * num_attributes
+    G = [['?'] * num_attributes]
+    for i, instance in enumerate(X):
+        if y[i].lower() in ['yes', '1', 'positive']:
+            G = [g for g in G if all(g[j] == '?' or g[j] == instance[j] for j in range(num_attributes))]  
+            if S == ['0'] * num_attributes:
+                S = list(instance)
+            else:
+                for j in range(num_attributes):
+                    if S[j] != instance[j]:
+                        S[j] = '?'
+        else:       
+            new_G = []
+            for g in G:
+                if all(g[j] == '?' or g[j] == instance[j] for j in range(num_attributes)):
+                    for j in range(num_attributes):
+                        if g[j] == '?' and S[j] != instance[j]:
+                            spec = list(g)
+                            spec[j] = S[j]
+                            new_G.append(spec)
+                else:
+                    new_G.append(g)
+            G = new_G
+    return S, G
