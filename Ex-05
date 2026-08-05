@@ -1,0 +1,33 @@
+import numpy as np
+
+class KNN:
+    def __init__(self, k=3):
+        self.k = k
+
+    def fit(self, X_train, y_train):
+        self.X_train = np.array(X_train)
+        self.y_train = np.array(y_train)
+
+    def predict(self, X_test):
+        predictions = [self._predict_sample(x) for x in np.array(X_test)]
+        return np.array(predictions)
+
+    def _predict_sample(self, x):
+
+        distances = np.sqrt(np.sum((self.X_train - x) ** 2, axis=1))
+
+        k_indices = np.argsort(distances)[:self.k]
+        k_nearest_labels = self.y_train[k_indices]
+    
+        labels, counts = np.unique(k_nearest_labels, return_counts=True)
+        return labels[np.argmax(counts)]
+
+if __name__ == "__main__":
+    X_train = [[1, 2], [2, 3], [3, 1], [6, 5], [7, 7], [8, 6]]
+    y_train = [0, 0, 0, 1, 1, 1]  
+    
+    knn = KNN(k=3)
+    knn.fit(X_train, y_train)
+    
+    X_test = [[2, 2], [7, 6]]
+    print("Class predictions for test points:", knn.predict(X_test))
