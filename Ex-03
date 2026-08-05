@@ -1,0 +1,47 @@
+import pandas as pd
+import numpy as np
+import math
+
+def entropy(target_col):
+    elements, counts = np.unique(target_col, return_counts=True)
+    return sum((-counts[i]/len(target_col)) * math.log2(counts[i]/len(target_col)) for i in range(len(elements)))
+
+def info_gain(data, split_attribute, target_name="Play"):
+    total_entropy = entropy(data[target_name])
+    vals, counts = np.unique(data[split_attribute], return_counts=True)
+    weighted_entropy = sum((counts[i]/sum(counts)) * entropy(data[data[split_attribute] == vals[i]][target_name]) for i in range(len(vals)))
+    return total_entropy - weighted_entropy
+
+def id3(data, original_data, features, target_attribute_name="Play", parent_node_class=None):
+    if len(np.unique(data[target_attribute_name])) <= 1:
+        return np.unique(data[target_attribute_name])[0]
+    
+    elif len(data) == 0:
+        return np.unique(original_data[target_attribute_name])[np.argmax(np.unique(original_data[target_attribute_name], return_counts=True)[1])]
+    
+    elif len(features) == 0:
+        return parent_node_class
+    
+    else:
+        parent_node_class = np.unique(data[target_attribute_name])[np.argmax(np.unique(data[target_attribute_name], return_counts=True)[1])]
+        gains = [info_gain(data, feature, target_attribute_name) for feature in features]
+        best_feature = features[np.argmax(gains)]
+        
+        tree = {best_feature: {}}
+        features = [i for i in features if i != best_feature]
+        
+        for value in np.unique(data[best_feature]):
+            sub_data = data[data[best_feature] == value]
+            tree[best_feature][value] = id3(sub_data, data, features, target_attribute_name, parent_node_class)
+            
+        return tree
+
+def classify(sample, tree):
+    for attribute in list(sample.keys()):
+        if attribute in list(tree.keys()):
+            result = tree[attribute].get(sample[attribute])
+            if isinstance(result, dict):
+                return classify(sample, result)
+            else:
+                return result
+
