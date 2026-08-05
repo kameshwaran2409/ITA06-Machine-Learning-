@@ -1,0 +1,25 @@
+import pandas as pd
+
+def find_s(csv_file):
+    df = pd.read_csv(csv_file)
+    X = df.iloc[:, :-1].values
+    y = df.iloc[:, -1].values
+
+    # Initialize hypothesis with the first positive example
+    num_attributes = X.shape[1]
+    hypothesis = ['0'] * num_attributes
+
+    for i in range(len(X)):
+        if y[i].lower() in ['yes', '1', 'positive']:  # Consider positive cases
+            if hypothesis == ['0'] * num_attributes:
+                hypothesis = list(X[i])
+            else:
+                for j in range(num_attributes):
+                    if hypothesis[j] != X[i][j]:
+                        hypothesis[j] = '?'
+
+    return hypothesis
+
+# Demonstration
+# Replace 'data.csv' with your dataset (e.g., EnjoySport)
+# print("Most Specific Hypothesis:", find_s('data.csv'))
