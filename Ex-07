@@ -1,0 +1,115 @@
+
+import math
+
+data = [
+    [1, 1, 0],
+    [1, 2, 0],
+    [2, 1, 0],
+    [2, 2, 0],
+    [2, 3, 0],
+    [3, 2, 0],
+
+    [6, 6, 1],
+    [6, 7, 1],
+    [7, 6, 1],
+    [7, 7, 1],
+    [8, 7, 1],
+    [8, 8, 1]
+]
+
+train_data = data[:8]
+test_data = data[8:]
+
+X_train = [[row[0], row[1]] for row in train_data]
+y_train = [row[2] for row in train_data]
+
+X_test = [[row[0], row[1]] for row in test_data]
+y_test = [row[2] for row in test_data]
+
+def sigmoid(z):
+    if z < -700:
+        return 0
+    if z > 700:
+        return 1
+    return 1 / (1 + math.exp(-z))
+
+weights = [0.0, 0.0]
+bias = 0.0
+
+learning_rate = 0.1
+epochs = 1000
+
+for epoch in range(epochs):
+    weight_gradient = [0.0, 0.0]
+    bias_gradient = 0.0
+
+    for i in range(len(X_train)):
+        x1 = X_train[i][0]
+        x2 = X_train[i][1]
+        actual = y_train[i]
+
+        z = weights[0] * x1 + weights[1] * x2 + bias
+
+        prediction = sigmoid(z)
+
+        error = prediction - actual
+
+        weight_gradient[0] += error * x1
+        weight_gradient[1] += error * x2
+        bias_gradient += error
+
+    weights[0] -= learning_rate * weight_gradient[0] / len(X_train)
+    weights[1] -= learning_rate * weight_gradient[1] / len(X_train)
+    bias -= learning_rate * bias_gradient / len(X_train)
+
+def predict(features):
+    z = weights[0] * features[0] + weights[1] * features[1] + bias
+    probability = sigmoid(z)
+
+    if probability >= 0.5:
+        return 1
+    else:
+        return 0
+
+predictions = []
+
+for row in X_test:
+    predictions.append(predict(row))
+
+correct = 0
+
+for actual, predicted in zip(y_test, predictions):
+    if actual == predicted:
+        correct += 1
+
+accuracy = correct / len(y_test) * 100
+true_negative = 0
+false_positive = 0
+false_negative = 0
+true_positive = 0
+
+for actual, predicted in zip(y_test, predictions):
+    if actual == 0 and predicted == 0:
+        true_negative += 1
+    elif actual == 0 and predicted == 1:
+        false_positive += 1
+    elif actual == 1 and predicted == 0:
+        false_negative += 1
+    elif actual == 1 and predicted == 1:
+        true_positive += 1
+
+
+print("Logistic Regression Results")
+print("---------------------------")
+print("Weights:", weights)
+print("Bias:", bias)
+
+print("\nActual Values:   ", y_test)
+print("Predicted Values:", predictions)
+
+print("\nAccuracy:", round(accuracy, 2), "%")
+
+print("\nConfusion Matrix")
+print("                 Predicted 0    Predicted 1")
+print("Actual 0              ", true_negative, "            ", false_positive)
+print("Actual 1              ", false_negative, "            ", true_positive)
