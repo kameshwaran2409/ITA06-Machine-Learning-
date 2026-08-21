@@ -1,0 +1,57 @@
+import random
+
+random.seed(42)
+
+data = []
+
+for i in range(100):
+    income = random.randint(20000, 100000)
+    debt = random.randint(0, 50000)
+    payment = random.randint(0, 100)
+
+    score = income - debt + payment * 500
+
+    if score > 80000:
+        credit = "Good"
+    elif score > 40000:
+        credit = "Average"
+    else:
+        credit = "Poor"
+
+    data.append([income, debt, payment, credit])
+
+print("SESSION 11: CREDIT SCORE CLASSIFICATION")
+print("-" * 45)
+
+print("\nIncome\tDebt\tPayment\tCredit Score")
+
+for row in data[:10]:
+    print(row[0], "\t", row[1], "\t", row[2], "\t", row[3])
+
+good = sum(1 for x in data if x[3] == "Good")
+average = sum(1 for x in data if x[3] == "Average")
+poor = sum(1 for x in data if x[3] == "Poor")
+
+print("\nClassification Results")
+print("Good Credit:", good)
+print("Average Credit:", average)
+print("Poor Credit:", poor)
+
+income = 85000
+debt = 15000
+payment = 90
+
+score = income - debt + payment * 500
+
+if score > 80000:
+    prediction = "Good"
+elif score > 40000:
+    prediction = "Average"
+else:
+    prediction = "Poor"
+
+print("\nNew Customer Prediction")
+print("Income:", income)
+print("Debt:", debt)
+print("Payment History:", payment)
+print("Predicted Credit Score:", prediction)
