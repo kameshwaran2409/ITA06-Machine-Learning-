@@ -1,0 +1,33 @@
+import random
+random.seed(42)
+X = [2 * random.random() for i in range(100)]
+y = [4 + 3 * X[i] + random.uniform(-1, 1)
+     for i in range(100)]
+split = 80
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
+mean_x = sum(X_train) / len(X_train)
+mean_y = sum(y_train) / len(y_train)
+num = sum((X_train[i] - mean_x) *
+          (y_train[i] - mean_y)
+          for i in range(len(X_train)))
+den = sum((x - mean_x) ** 2 for x in X_train)
+slope = num / den
+intercept = mean_y - slope * mean_x
+pred = [intercept + slope * x for x in X_test]
+mse = sum((y_test[i] - pred[i]) ** 2
+          for i in range(len(y_test))) / len(y_test)
+mean_test = sum(y_test) / len(y_test)
+ss_total = sum((v - mean_test) ** 2 for v in y_test)
+ss_error = sum((y_test[i] - pred[i]) ** 2
+               for i in range(len(y_test)))
+r2 = 1 - ss_error / ss_total
+print("LINEAR REGRESSION")
+print("Slope:", round(slope, 3))
+print("Intercept:", round(intercept, 3))
+print("MSE:", round(mse, 3))
+print("R-Squared:", round(r2, 3))
+print("\nSample Predictions:")
+for i in range(5):
+    print("Actual:", round(y_test[i], 2),
+          "Predicted:", round(pred[i], 2))
