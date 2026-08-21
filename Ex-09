@@ -1,0 +1,42 @@
+import random
+random.seed(42)
+X = [random.uniform(-5, 5) for i in range(100)]
+y = [x * x + random.uniform(-3, 3) for x in X]
+X_train, X_test = X[:80], X[80:]
+y_train, y_test = y[:80], y[80:]
+mx = sum(X_train) / len(X_train)
+my = sum(y_train) / len(y_train)
+slope = sum((X_train[i]-mx)*(y_train[i]-my)
+            for i in range(len(X_train))) / \
+        sum((x-mx)**2 for x in X_train)
+intercept = my - slope * mx
+linear_pred = [intercept + slope*x for x in X_test]
+X2 = [x*x for x in X_train]
+mean_x2 = sum(X2) / len(X2)
+mean_y = sum(y_train) / len(y_train)
+a = sum((X2[i]-mean_x2)*(y_train[i]-mean_y)
+        for i in range(len(X2))) / \
+    sum((x-mean_x2)**2 for x in X2)
+c = mean_y - a * mean_x2
+
+poly_pred = [a*x*x + c for x in X_test]
+
+linear_mse = sum((y_test[i]-linear_pred[i])**2
+                 for i in range(len(y_test))) / len(y_test)
+
+poly_mse = sum((y_test[i]-poly_pred[i])**2
+               for i in range(len(y_test))) / len(y_test)
+
+print("\nLinear Regression MSE:", round(linear_mse, 3))
+print("Polynomial Regression MSE:", round(poly_mse, 3))
+
+if poly_mse < linear_mse:
+    print("\nPolynomial Regression performs better!")
+else:
+    print("\nLinear Regression performs better!")
+
+print("\nSample Predictions:")
+for i in range(5):
+    print("Actual:", round(y_test[i], 2),
+          "Linear:", round(linear_pred[i], 2),
+          "Polynomial:", round(poly_pred[i], 2))
