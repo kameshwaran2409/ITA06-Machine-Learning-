@@ -1,0 +1,51 @@
+import random
+import math
+
+random.seed(42)
+
+data = []
+
+for i in range(30):
+    if i < 10:
+        x = random.uniform(4, 5)
+        y = random.uniform(2, 3)
+        label = "Setosa"
+    elif i < 20:
+        x = random.uniform(5, 6)
+        y = random.uniform(2.5, 3.5)
+        label = "Versicolor"
+    else:
+        x = random.uniform(6, 7.5)
+        y = random.uniform(3, 4)
+        label = "Virginica"
+
+    data.append([x, y, label])
+
+classes = ["Setosa", "Versicolor", "Virginica"]
+means = {}
+
+for flower in classes:
+    points = [row for row in data if row[2] == flower]
+    mx = sum(row[0] for row in points) / len(points)
+    my = sum(row[1] for row in points) / len(points)
+    means[flower] = [mx, my]
+
+test = [5.8, 3.0]
+
+best_class = ""
+best_distance = float("inf")
+
+for flower in classes:
+    mx, my = means[flower]
+    distance = math.sqrt((test[0]-mx)**2 + (test[1]-my)**2)
+
+    if distance < best_distance:
+        best_distance = distance
+        best_class = flower
+
+print("\nTest Flower:", test)
+print("Predicted Class:", best_class)
+
+print("\nClass Means:")
+for flower in classes:
+    print(flower, ":", means[flower])
