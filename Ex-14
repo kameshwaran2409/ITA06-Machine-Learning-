@@ -1,0 +1,36 @@
+import random
+
+random.seed(42)
+
+houses = []
+
+for i in range(50):
+    area = random.randint(500, 3000)
+    bedrooms = random.randint(1, 5)
+    age = random.randint(0, 30)
+
+    price = area * 5000 + bedrooms * 300000 - age * 50000
+    price += random.randint(-200000, 200000)
+
+    houses.append([area, bedrooms, age, price])
+
+print("-" * 40)
+print("Area\tBedrooms\tAge\tPrice")
+
+for house in houses[:5]:
+    print(house[0], "\t", house[1], "\t\t",
+          house[2], "\t", int(house[3]))
+
+area = 2000
+bedrooms = 3
+age = 5
+
+predicted_price = area * 5000
+predicted_price += bedrooms * 300000
+predicted_price -= age * 50000
+
+print("\nNew House Details")
+print("Area:", area, "sq.ft")
+print("Bedrooms:", bedrooms)
+print("Age:", age, "years")
+print("Predicted Price: Rs.", int(predicted_price))
