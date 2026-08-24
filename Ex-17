@@ -1,0 +1,48 @@
+import random
+
+random.seed(42)
+
+mobiles = []
+
+for i in range(50):
+    ram = random.choice([4, 6, 8, 12])
+    battery = random.randint(3000, 7000)
+    camera = random.randint(12, 108)
+
+    price = ram * 5000 + battery * 5 + camera * 1000
+    price += random.randint(-10000, 10000)
+
+    if price < 70000:
+        category = "Low"
+    elif price < 120000:
+        category = "Medium"
+    else:
+        category = "High"
+
+    mobiles.append([ram, battery, camera, category])
+
+print("-" * 45)
+print("RAM\tBattery\tCamera\tPrice Range")
+
+for mobile in mobiles[:5]:
+    print(mobile[0], "GB\t", mobile[1], "mAh\t",
+          mobile[2], "MP\t", mobile[3])
+
+ram = 8
+battery = 5000
+camera = 64
+
+price = ram * 5000 + battery * 5 + camera * 1000
+
+if price < 70000:
+    prediction = "Low"
+elif price < 120000:
+    prediction = "Medium"
+else:
+    prediction = "High"
+
+print("\nNew Mobile Details")
+print("RAM:", ram, "GB")
+print("Battery:", battery, "mAh")
+print("Camera:", camera, "MP")
+print("Predicted Price Range:", prediction)
