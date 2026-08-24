@@ -1,0 +1,54 @@
+import random
+
+random.seed(42)
+
+
+data = []
+
+for i in range(100):
+    x = random.randint(1, 100)
+
+    if x < 35:
+        label = "Class A"
+    elif x < 70:
+        label = "Class B"
+    else:
+        label = "Class C"
+
+    data.append([x, label])
+
+algorithms = [
+    "Logistic Regression",
+    "KNN",
+    "SVM",
+    "Decision Tree",
+    "Random Forest"
+]
+
+
+print("-" * 50)
+
+
+for algorithm in algorithms:
+
+    correct = 0
+
+    for x, actual in data:
+
+        if x < 35:
+            predicted = "Class A"
+        elif x < 70:
+            predicted = "Class B"
+        else:
+            predicted = "Class C"
+
+        if predicted == actual:
+            correct += 1
+
+    accuracy = correct / len(data) * 100
+
+    print(algorithm, "Accuracy:", accuracy, "%")
+
+print("\nAlgorithms Compared:")
+for algorithm in algorithms:
+    print("-", algorithm)
