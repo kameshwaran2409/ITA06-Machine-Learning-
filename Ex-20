@@ -1,0 +1,31 @@
+import random
+
+random.seed(42)
+
+sales = []
+
+for month in range(1, 25):
+    trend = month * 100
+    season = 500 if month % 6 == 0 else 0
+    noise = random.randint(-100, 100)
+    sales.append(5000 + trend + season + noise)
+
+print("-" * 40)
+
+print("Previous Sales:")
+print(sales)
+
+moving_average = sum(sales[-3:]) / 3
+
+growth = (sales[-1] - sales[0]) / len(sales)
+trend_prediction = sales[-1] + growth
+
+print("\nFuture Sales Prediction")
+print("Moving Average:", round(moving_average, 2))
+print("Trend Prediction:", round(trend_prediction, 2))
+
+print("\nNext 3 Months Sales:")
+
+for i in range(1, 4):
+    prediction = sales[-1] + growth * i
+    print("Month", 24 + i, ":", round(prediction, 2))
