@@ -1,0 +1,48 @@
+import random
+random.seed(42)
+
+data = []
+
+for i in range(50):
+    income = random.randint(20000, 100000)
+    credit = random.randint(300, 850)
+    loan = random.randint(10000, 80000)
+
+    if income > 50000 and credit > 600 and loan < income:
+        approved = "Approved"
+    else:
+        approved = "Rejected"
+
+    data.append([income, credit, loan, approved])
+
+approved = sum(1 for x in data if x[3] == "Approved")
+rejected = len(data) - approved
+
+print("-" * 40)
+
+print("Approved Loans:", approved)
+print("Rejected Loans:", rejected)
+
+income = 75000
+credit = 720
+loan = 40000
+
+score = 0
+
+if income > 50000:
+    score += 1
+if credit > 600:
+    score += 1
+if loan < income:
+    score += 1
+
+if score >= 2:
+    prediction = "Approved"
+else:
+    prediction = "Rejected"
+
+print("\nNew Customer Details")
+print("Income:", income)
+print("Credit Score:", credit)
+print("Loan Amount:", loan)
+print("\nLoan Prediction:", prediction)
