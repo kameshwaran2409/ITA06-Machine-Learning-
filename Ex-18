@@ -1,0 +1,61 @@
+import random
+random.seed(42)
+data = []
+
+for i in range(40):
+    if i < 20:
+        x1 = random.uniform(4, 5.5)
+        x2 = random.uniform(2, 3)
+        label = 0   # 
+    else:
+        x1 = random.uniform(5.5, 7)
+        x2 = random.uniform(3, 4)
+        label = 1   #
+
+    data.append([x1, x2, label])
+
+w1 = 0
+w2 = 0
+bias = 0
+learning_rate = 0.1
+
+for epoch in range(10):
+
+    errors = 0
+
+    for x1, x2, actual in data:
+
+        output = w1 * x1 + w2 * x2 + bias
+
+        if output >= 0:
+            predicted = 1
+        else:
+            predicted = 0
+
+        error = actual - predicted
+
+        w1 += learning_rate * error * x1
+        w2 += learning_rate * error * x2
+        bias += learning_rate * error
+
+        if error != 0:
+            errors += 1
+
+    print("Epoch", epoch + 1, "- Errors:", errors)
+
+    if errors == 0:
+        break
+
+test = [6.2, 3.5]
+
+output = w1 * test[0] + w2 * test[1] + bias
+
+if output >= 0:
+    prediction = "Non-Setosa"
+else:
+    prediction = "Setosa"
+
+print("Test Flower:", test)
+print("Prediction:", prediction)
+print("Final Weights:", round(w1, 2), round(w2, 2))
+print("Final Bias:", round(bias, 2))
